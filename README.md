@@ -1,4 +1,4 @@
-# hybrid
+# 	Internal ballistic reconstruction of hybrid rocket engine.
 
 This program works for hybrid rocket engine.
 
