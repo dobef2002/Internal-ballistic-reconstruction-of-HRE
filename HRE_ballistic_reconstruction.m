@@ -6,6 +6,7 @@
          %eff=cstar_efficiency;
          delta_time= testdata.dt;
          At=testdata.At;                    %nozzle throat area cm^2
+         aeat=testdata.aeat:
          
          j=1;k=1;fuel_checkpoint=1;
          mass.fuel_test=testdata.total_fuel_weight;
@@ -20,16 +21,16 @@
          ofratio(1)=testdata.initial_OF_ratio;  % set up initial o/f value. Calculated from geometrical shape.
          
       while abs(fuel_checkpoint) > 0.001 
-             pcdt=0;modt=0;mass.fuel=0;
+             pcatdt=0;modt=0;mass.fuel=0;
          for k=1:datalength
              exaim=0;
              for OF=0.5:0.1:15
                   
-                 [cstar]=Cea_cstar_calculate(eff,OF,pc(k),testdata.propellant_properties);
+                 [cstar]=Cea_cstar_calculate(eff,OF,pc(k),testdata.propellant_properties,aeat(k));
          
              
                  C=cstar*eff;
-                 massdot.propellant=(pc(k)*1000*9.80665*0.070306958*At)/C;    % g/s
+                 massdot.propellant=(pc(k)*1000*9.80665*0.070306958*At(k))/C;    % g/s
                  massdot.fuel=massdot.propellant-msaadot.ox(k);
                      if massdot.fuel <= 0  % if fuel mass flow rate < 0, try another o/f ratio
                      
@@ -73,14 +74,14 @@
                       time(k+1)=(massdot.ox(k)/massdot.fuel);
                     end
                      
-                       pcdt=pcdt+pc(k)*delta_time;
+                       pcatdt=pcatdt+pc(k)*At(k)*delta_time;
                        modt=modt+mo(k)*delta_time;
                        cstar_ave_theory=cstar*delta_time;
                  end
     fuel_checkpoint=1-(mass.fuel/mass.fuel_test)
 
      % update cstar efficiency
-       %  cstar_ave_RT=(pcdt/(modt+mass.fuel));
+       %  cstar_ave_RT=(pcatdt/(modt+mass.fuel));
        %  eff=(cstar_ave_RT/cstar_ave_theory);
       if abs(fuel_checkpoint) > 0.001  
          if fuel_checkpoint > 0
