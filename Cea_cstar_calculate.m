@@ -1,4 +1,4 @@
-Function cstar=Cea_cstar_calculate(eff,OF,pc,propellent_properties,aeat)
+Function cstar=Cea_cstar_calculate(eff,OF,pc,propellant_properties,aeat)
 
        fw=fopen('cstar_cal.inp','w');
        fprintf(fw,'problem \r\n');
